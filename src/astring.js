@@ -997,6 +997,7 @@ class State {
     if (node != null && node.loc != null) {
       const { mapping } = this
       mapping.original = node.loc.start
+      mapping.source = node.loc.source || mapping.source
       mapping.name = node.name
       this.sourceMap.addMapping(mapping)
     }
