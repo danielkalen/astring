@@ -999,10 +999,20 @@
       if (node != null && node.loc != null) {
         var mapping = this.mapping;
 
+        var last = this.sourceMap._mappings && this.sourceMap._mappings._last;
         mapping.original = node.loc.start;
         mapping.source = node.loc.source || mapping.source;
         mapping.name = node.name;
-        this.sourceMap.addMapping(mapping);
+
+        if (last && last.originalLine === mapping.original.line && last.originalColumn === mapping.original.column) {
+          if (mapping.name && !last.name) {
+            last.name = mapping.name;
+            this.sourceMap._names.add(mapping.name);
+          }
+        } else {
+          this.sourceMap.addMapping(mapping);
+        }
+        // this.sourceMap.addMapping(mapping)
       }
       if (code.length > 0) {
         if (this.lineEndSize > 0) {
